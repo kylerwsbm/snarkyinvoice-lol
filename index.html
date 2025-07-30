@@ -158,27 +158,36 @@
           generateMessage();
         }
 
-        // Download invoice as PDF
-        function downloadPDF() {
-          const element = document.getElementById('invoice-preview');
-          const opt = {
-            margin:       10,
-            filename:     `invoice-${invoiceNumber}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, scrollY: 0 },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        // Share the invoice via the Web Share API if available. This uses the
+        // current invoice message along with basic invoice details. On
+        // browsers that don’t support navigator.share, it falls back to
+        // showing an alert with the text to copy.
+        function shareInvoice() {
+          // Ensure there is a message. If the user hasn’t clicked generate yet
+          // we generate one on the fly using the current inputs.
+          if (!message) {
+            generateMessage();
+          }
+          const textToShare = `Invoice #${invoiceNumber}\nFrom: ${sender || '____'}\nTo: ${recipient || '____'}\nAmount Due: ${formatCurrency(amount)}\n\n${message}`;
+          const shareData = {
+            title: 'SnarkyInvoice Invoice',
+            text: textToShare,
           };
-          html2pdf().set(opt).from(element).save();
-        }
-
-        // Email stub
-        function sendEmail() {
-          alert('Email functionality is coming soon. For now, copy and paste the invoice into an email!');
-        }
-
-        // Placeholder for Stripe
-        function payStripe() {
-          alert('Stripe integration is coming soon. Stay tuned!');
+          if (navigator.share) {
+            navigator.share(shareData).catch((err) => {
+              console.error(err);
+              alert('Sharing failed: ' + err);
+            });
+          } else {
+            // Fallback: prompt user to copy the invoice text
+            const tempArea = document.createElement('textarea');
+            tempArea.value = textToShare;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+            alert('Sharing is not supported on this device. The invoice text has been copied to your clipboard.');
+          }
         }
 
         return (
@@ -280,9 +289,7 @@
                 </div>
               </div>
               <div className="button-row">
-                <button onClick={downloadPDF}>Download as PDF</button>
-                <button onClick={sendEmail}>Send by Email</button>
-                <button onClick={payStripe} disabled>Pay with Stripe (coming soon)</button>
+                <button onClick={shareInvoice}>Share Invoice</button>
               </div>
             </section>
           </div>
