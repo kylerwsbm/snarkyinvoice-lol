@@ -1,0 +1,9 @@
+# Ignore OS and editor files
+.DS_Store
+Thumbs.db
+__pycache__/
+*.log
+node_modules/
+
+# Ignore build output (not used, but for future bundlers)
+dist/
