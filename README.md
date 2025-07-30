@@ -10,7 +10,7 @@ SnarkyInvoice.lol is a tongue‑in‑cheek invoicing tool designed to help you s
 * **Random Reasons** – Stuck on a reason? Click “Need inspiration?” to populate the reason field with a random petty suggestion.
 * **Petty Meter** – A live descriptor (Polite, Saucy, Unhinged) appears next to the slider so you know exactly how over‑the‑top your invoice will be.
 * **Playful Design** – A colourful doodle pattern in the header and witty tooltips throughout the form keep things light while you bill with spite.
-* **Share Button** – Instantly share your invoice using the Web Share API on supported devices. If sharing isn’t available, the invoice text is copied to your clipboard so you can paste it anywhere.
+* **Share Button** – Instantly share your invoice as an image. When supported, the Web Share API opens your device’s native share sheet with a PNG of the invoice attached. On devices that don’t support file sharing, the image is automatically downloaded so you can send it yourself.
 
 ## Getting Started
 
@@ -29,7 +29,7 @@ This site can be deployed directly to any static hosting provider. For this MVP,
 
 ## Future Enhancements
 
-- **Richer sharing options** – The current share button sends a simple text representation of the invoice. A future version could generate an image of the invoice (using a library like `html2canvas`) and include it as an attachment when sharing.
+ - **Richer sharing options** – Explore additional formats such as PDF exports or direct messaging integrations (e.g. WhatsApp or Telegram API) so users can send their invoices in even more ways.
 - **Payment integration** – When we’re ready to get serious, integrate [Stripe](https://stripe.com/) to accept real payments—just make sure your friends are good sports!
 - **Persistence** – Save invoice history in local storage or a database so you can keep tabs on all your petty billing.
 - **Build tools** – Replace the CDN‑loaded React with a proper bundler like Vite once package registry access is available.

@@ -13,8 +13,14 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <!-- Babel for JSX compilation in the browser -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- html2pdf.js for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js" integrity="sha512-GbBbs4XkZ7XNrM5JPSbSGwXjs5+S7Rn7BX2no76FTy4kXZMHaXYr4iOYk9SQ41LA5jctt229OgDh6fyyI1QRog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- html2pdf.js for PDF generation (retained for future enhancements) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"
+            integrity="sha512-GbBbs4XkZ7XNrM5JPSbSGwXjs5+S7Rn7BX2no76FTy4kXZMHaXYr4iOYk9SQ41LA5jctt229OgDh6fyyI1QRog=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- html2canvas for capturing DOM elements as images -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+            integrity="sha512-BNaZM+G0Xzb1M9JDhNxOGS2PzIrYMjftfVGisXOyhbzw/VDwT4sEajLxEC8IdwqY4AH8n6W71qpgEVFsu+kGDg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
   <body>
     <header>
@@ -158,35 +164,45 @@
           generateMessage();
         }
 
-        // Share the invoice via the Web Share API if available. This uses the
-        // current invoice message along with basic invoice details. On
-        // browsers that don’t support navigator.share, it falls back to
-        // showing an alert with the text to copy.
-        function shareInvoice() {
-          // Ensure there is a message. If the user hasn’t clicked generate yet
-          // we generate one on the fly using the current inputs.
+        // Share the invoice as an image. We capture the invoice preview using
+        // html2canvas and then leverage the Web Share API on devices that
+        // support sharing files. When file sharing isn’t available, we fall
+        // back to downloading the image and showing a helpful alert.
+        async function shareInvoice() {
+          // Ensure a message exists; if the user hasn’t clicked generate yet
           if (!message) {
             generateMessage();
           }
-          const textToShare = `Invoice #${invoiceNumber}\nFrom: ${sender || '____'}\nTo: ${recipient || '____'}\nAmount Due: ${formatCurrency(amount)}\n\n${message}`;
-          const shareData = {
-            title: 'SnarkyInvoice Invoice',
-            text: textToShare,
-          };
-          if (navigator.share) {
-            navigator.share(shareData).catch((err) => {
-              console.error(err);
-              alert('Sharing failed: ' + err);
-            });
-          } else {
-            // Fallback: prompt user to copy the invoice text
-            const tempArea = document.createElement('textarea');
-            tempArea.value = textToShare;
-            document.body.appendChild(tempArea);
-            tempArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempArea);
-            alert('Sharing is not supported on this device. The invoice text has been copied to your clipboard.');
+          // Select the invoice preview container
+          const invoiceElement = document.getElementById('invoice-preview');
+          try {
+            // Render the DOM element to a canvas
+            const canvas = await html2canvas(invoiceElement);
+            // Convert canvas to blob
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+            const fileName = `invoice-${invoiceNumber}.png`;
+            const file = new File([blob], fileName, { type: 'image/png' });
+            // Use the Web Share API with files if supported
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({
+                title: 'SnarkyInvoice Invoice',
+                files: [file],
+              });
+            } else {
+              // Fallback: trigger a download of the image and notify the user
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = fileName;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+              alert('Sharing is not supported on this device. The invoice image has been downloaded instead.');
+            }
+          } catch (err) {
+            console.error(err);
+            alert('An error occurred while preparing the invoice for sharing.');
           }
         }
 

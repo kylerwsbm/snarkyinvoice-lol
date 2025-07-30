@@ -153,13 +153,15 @@ form {
 
 .invoice-header h3 {
   margin: 0;
-  font-size: 1.5rem;
+      /* Make the invoice title stand out like a real document */
+      font-size: 1.75rem;
   color: #2c3e50;
 }
 
 .invoice-header p {
-  margin: 0.2rem 0;
-  color: #555;
+      margin: 0.2rem 0;
+      color: #555;
+      font-size: 1rem;
 }
 
 /* Invoice tagline styling */
