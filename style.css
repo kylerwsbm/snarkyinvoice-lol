@@ -7,17 +7,31 @@ body {
   line-height: 1.5;
 }
 
+/*
+ * Header styling
+ * Replace the solid background colour with a playful doodle pattern to
+ * reinforce the meme‑like feel of the site. The image is a decorative
+ * pattern generated via our image generator so it doesn’t reference any
+ * real‑world entities. We overlay the text shadow to improve contrast
+ * against the busy background.
+ */
 header {
-  background-color: #4e77e9;
-  color: white;
+  /* Use a fun doodle image as the header background */
+  background-image: url('header-doodle.png');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
   padding: 1.5rem;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Add a subtle overlay via box shadow to help text readability */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 header h1 {
   margin: 0;
   font-size: 2rem;
+  font-family: 'Fredoka', cursive;
 }
 
 header .tagline {
@@ -25,6 +39,7 @@ header .tagline {
   font-style: italic;
   font-size: 1rem;
   opacity: 0.9;
+  font-family: 'Fredoka', cursive;
 }
 
 main {
@@ -147,6 +162,14 @@ form {
   color: #555;
 }
 
+/* Invoice tagline styling */
+.invoice-tagline {
+  font-size: 0.8rem;
+  color: #888;
+  font-style: italic;
+  font-family: 'Fredoka', cursive;
+}
+
 .invoice-info {
   margin-bottom: 1rem;
   font-size: 0.95rem;
@@ -192,6 +215,23 @@ form {
 .button-row button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
+}
+
+/* Random reason button styling */
+.random-reason-btn {
+  margin-top: 0.3rem;
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #4e77e9;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.random-reason-btn:hover {
+  color: #355fcf;
 }
 
 /* Responsive adjustments */

@@ -5,8 +5,11 @@ SnarkyInvoice.lol is a tongue‑in‑cheek invoicing tool designed to help you s
 ## Features
 
 * **React App** – Built with a simple React front end (loaded via CDN), no backend required.
-* **Friendly Form** – Enter the sender and recipient names, a reason for the invoice, a suggested amount in USD, adjust the “Petty Level” (0‑100) and decide whether to include a ridiculous ultimatum.
+* **Friendly Form** – Enter the sender and recipient names, a reason for the invoice, a suggested amount in USD, adjust the “Petty Level” (0–100) and decide whether to include a ridiculous ultimatum.
 * **Snark Engine** – Generates a message by combining your inputs with a random snarky template. Tone and vocabulary change based on the Petty Level slider.
+* **Random Reasons** – Stuck on a reason? Click “Need inspiration?” to populate the reason field with a random petty suggestion.
+* **Petty Meter** – A live descriptor (Polite, Saucy, Unhinged) appears next to the slider so you know exactly how over‑the‑top your invoice will be.
+* **Playful Design** – A colourful doodle pattern in the header and witty tooltips throughout the form keep things light while you bill with spite.
 * **PDF Download** – Render the invoice preview and download it as a PDF using [html2pdf.js](https://github.com/eKoopmans/html2pdf.js).
 * **Email Stub** – A “Send by Email” button is provided as a placeholder. In a future version you can wire this up with a service like EmailJS.
 * **Stripe Placeholder** – A disabled button hints at an eventual payment integration.
@@ -35,4 +38,4 @@ This site can be deployed directly to any static hosting provider. For this MVP,
 
 ## Disclaimer
 
-This project is for humour and educational purposes only. Use at your own risk, and don’t actually expect anyone to pay you for “emotional damage”… unless they deserve it.
+This project is for humour and educational purposes only. Use at your own risk—and don’t actually expect anyone to pay you for “emotional damage”… unless they deserve it. Send petty bills with maximum sass!

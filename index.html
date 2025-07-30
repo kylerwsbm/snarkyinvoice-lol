@@ -6,6 +6,8 @@
     <title>SnarkyInvoice.lol</title>
     <!-- Styles -->
     <link rel="stylesheet" href="style.css" />
+    <!-- Google font for playful headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet" />
     <!-- React and friends from CDNs -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -17,7 +19,7 @@
   <body>
     <header>
       <h1>SnarkyInvoice.lol</h1>
-      <p class="tagline">A serious invoicing tool for unserious people.</p>
+      <p class="tagline">Send petty bills with maximum sass.</p>
     </header>
 
     <main>
@@ -45,12 +47,19 @@
         "Hey {recipient}! It's me, {sender}. Just a heads up: you owe me {amount} for {reason}. Let's sort this out before it gets awkward. Thanks!",
         "{recipient}, please settle your tab of {amount} for {reason}. Don't make me send my imaginary collections department.",
         "Yo {recipient}! Remember that {reason}? Yeah, you owe {amount}. Let's wrap this up so we can still be friends. – {sender}.",
+        // Additional moderate templates for extra humor
+        "{recipient}, I'm sending you an invoice for {amount} over {reason}. It's like therapy, but cheaper.",
+        "Dear {recipient}, {reason} has cost me my sanity. Kindly pay {amount} so I can buy ice cream to recover. – {sender}.",
       ];
       const absurdTemplates = [
         "Yo {recipient}! You owe {amount} for {reason}, and my patience is running out. Pay up or I'll haunt your group chats forever. – {sender}",
         "To {recipient}: The emotional damages inflicted by {reason} total {amount}. Settle this or I'll start billing you for breathing. – {sender}",
         "Attention {recipient}, you now owe {amount} for {reason}. Failure to comply will result in me composing a diss track about you. – {sender}",
         "Hey {recipient}, you owe {amount} for {reason}. If you don't pay, I'll get a tattoo of your name in Comic Sans. Love, {sender}",
+        // More unhinged templates for maximum pettiness
+        "Attention {recipient}: You owe {amount} for {reason}. If not paid, I'll recount this tale to your future children as a bedtime story. – {sender}.",
+        "Hey {recipient}, {reason} has inflicted irreversible damage. Remit {amount} or I'll audition for The Voice with your name as my song title. – {sender}.",
+        "Yo {recipient}! {sender} here. {reason} is not free. Pay {amount} or I'll Photoshop you onto all my holiday cards.",
       ];
       const ultimatums = [
         "If unpaid, I’ll cut your fingernails while you sleep and eat them in front of your mom.",
@@ -58,6 +67,24 @@
         "If you don't pay, I'm telling HR that you microwaved fish in the office.",
         "If this invoice goes unpaid, be prepared to hear me sing karaoke at 3 a.m. outside your window.",
         "Non‑payment will result in me forwarding all your weird internet search history to your grandma.",
+        // Additional ultimatums for spice
+        "Fail to pay and I'll sign you up for every mailing list I can find.",
+        "Non-payment means I'll text your mom with your embarrassing childhood photos.",
+        "If you ignore this invoice, I'll host a three-hour interpretive dance about your lack of manners.",
+      ];
+
+      // Fun random petty reasons for inspiration
+      const randomReasons = [
+        'Leaving dirty dishes in the sink',
+        'Eating my leftovers without asking',
+        'Taking too long to reply to my texts',
+        'Breathing too loudly',
+        'Existing in my personal space',
+        'Using my Netflix account without permission',
+        'Spoiling the end of my favourite show',
+        'Ghosting me after a great chat',
+        'Chewing with your mouth open',
+        'That one time you said “it’s just a game”',
       ];
 
       // Helper to format currency
@@ -82,6 +109,15 @@
         const [invoiceNumber, setInvoiceNumber] = useState('');
         const [invoiceDate, setInvoiceDate] = useState('');
         const [message, setMessage] = useState('');
+
+        // Determine the descriptor for the current petty level
+        const pettyDescriptor = petty <= 33 ? 'Polite' : petty <= 66 ? 'Saucy' : 'Unhinged';
+
+        // Fill the reason field with a random petty reason
+        function setRandomReason() {
+          const r = randomReasons[randomIndex(randomReasons.length)];
+          setReason(r);
+        }
 
         // Generate invoice number & date on first render
         useEffect(() => {
@@ -151,53 +187,58 @@
               <h2>Generate your petty invoice</h2>
               <form onSubmit={handleGenerate}>
                 <div className="field">
-                  <label htmlFor="sender">Sender Name</label>
+                  <label htmlFor="sender" title="Who is petty enough to send this invoice?">Sender Name</label>
                   <input
                     type="text"
                     id="sender"
                     value={sender}
                     onChange={(e) => setSender(e.target.value)}
                     placeholder="Your name"
+                    title="Enter your name here. The world must know who holds this grudge."
                     required
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="recipient">Recipient Name</label>
+                  <label htmlFor="recipient" title="Whose feelings are we about to hurt?">Recipient Name</label>
                   <input
                     type="text"
                     id="recipient"
                     value={recipient}
                     onChange={(e) => setRecipient(e.target.value)}
                     placeholder="Person you're billing"
+                    title="Enter the lucky person you're invoicing."
                     required
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="reason">Reason for Invoice</label>
+                  <label htmlFor="reason" title="Let it all out… this is a safe space">Reason for Invoice</label>
                   <textarea
                     id="reason"
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     placeholder="e.g. Emotional damage, ghosting..."
+                    title="Explain why you're charging them. Go on, be dramatic."
                     rows="3"
                     required
                   ></textarea>
+                  <button type="button" className="random-reason-btn" onClick={setRandomReason}>Need inspiration?</button>
                 </div>
                 <div className="field">
-                  <label htmlFor="amount">Suggested Amount (USD)</label>
+                  <label htmlFor="amount" title="How much is their betrayal worth?">Suggested Amount (USD)</label>
                   <input
                     type="number"
                     id="amount"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="0.00"
+                    title="Set a totally reasonable price for their crimes."
                     step="0.01"
                     min="0"
                     required
                   />
                 </div>
                 <div className="field">
-                  <label htmlFor="petty">Petty Level: {petty}</label>
+                  <label htmlFor="petty" title="Slide to adjust the level of sass">Petty Level: {petty} – {pettyDescriptor}</label>
                   <input
                     type="range"
                     id="petty"
@@ -205,6 +246,7 @@
                     max="100"
                     value={petty}
                     onChange={(e) => setPetty(parseInt(e.target.value, 10))}
+                    title="0 = polite professional • 100 = unhinged madness"
                   />
                 </div>
                 <div className="field checkbox">
@@ -226,6 +268,7 @@
                   <h3>Petty Billing LLC</h3>
                   <p>Invoice #{invoiceNumber}</p>
                   <p>Date: {invoiceDate}</p>
+                  <p className="invoice-tagline">We take emotional damages seriously.</p>
                 </div>
                 <div className="invoice-info">
                   <p><strong>From:</strong> {sender || '____'}</p>
